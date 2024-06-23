@@ -14,7 +14,7 @@ extension Post {
         // MARK: - Types
         enum CodingKeys: String, CodingKey {
             case id
-            case imageName
+            case imageName 
         }
         
         // MARK: - Properties
