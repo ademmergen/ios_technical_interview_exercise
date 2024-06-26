@@ -23,6 +23,12 @@ class PostView: UIView {
     private let optionButton = UIButton()
     private let optionButton1 = UIButton()
     
+    private let percentLabel = UILabel()
+    private let percentLabel1 = UILabel()
+    
+    private let percent = UILabel()
+    private let percent1 = UILabel()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -74,6 +80,27 @@ class PostView: UIView {
         optionButton1.clipsToBounds = true
         optionButton1.addTarget(self, action: #selector(optionButton1Clicked), for: .touchUpInside)
         
+        percentLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        percentLabel.textColor = .white
+        percentLabel.text = "56"
+        
+        percentLabel1.font = .systemFont(ofSize: 15, weight: .bold)
+        percentLabel1.textColor = .white
+        percentLabel1.text = "44"
+        
+        percent.font = .systemFont(ofSize: 15, weight: .bold)
+        percent.textColor = .white
+        percent.text = "%"
+        
+        percent1.font = .systemFont(ofSize: 15, weight: .bold)
+        percent1.textColor = .white
+        percent1.text = "%"
+        
+        percentLabel.isHidden = true
+        percentLabel1.isHidden = true
+        percent.isHidden = true
+        percent1.isHidden = true
+        
         // Alt görselleri ekle
         addSubview(userImageView)
         addSubview(usernameLabel)
@@ -86,6 +113,10 @@ class PostView: UIView {
         addSubview(totalVotesLabel)
         addSubview(optionButton)
         addSubview(optionButton1)
+        addSubview(percentLabel)
+        addSubview(percentLabel1)
+        addSubview(percent)
+        addSubview(percent1)
         
         // Kısıtlamaları kur
         setupConstraints()
@@ -103,6 +134,10 @@ class PostView: UIView {
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         optionButton.translatesAutoresizingMaskIntoConstraints = false
         optionButton1.translatesAutoresizingMaskIntoConstraints = false
+        percentLabel.translatesAutoresizingMaskIntoConstraints = false
+        percentLabel1.translatesAutoresizingMaskIntoConstraints = false
+        percent.translatesAutoresizingMaskIntoConstraints = false
+        percent1.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             
@@ -153,6 +188,19 @@ class PostView: UIView {
             optionButton1.bottomAnchor.constraint(equalTo: optionImageView1.bottomAnchor, constant: -10),
             optionButton1.widthAnchor.constraint(equalToConstant: 30),
             optionButton1.heightAnchor.constraint(equalToConstant: 30),
+            
+            percentLabel.trailingAnchor.constraint(equalTo: percent.leadingAnchor, constant: 1),
+            percentLabel.bottomAnchor.constraint(equalTo: optionImageView.bottomAnchor, constant: -15),
+            
+            percentLabel1.trailingAnchor.constraint(equalTo: percent1.leadingAnchor, constant: 1),
+            percentLabel1.bottomAnchor.constraint(equalTo: optionImageView1.bottomAnchor, constant: -15),
+            
+            percent.trailingAnchor.constraint(equalTo: optionImageView.trailingAnchor, constant: -10),
+            percent.bottomAnchor.constraint(equalTo: optionImageView.bottomAnchor, constant: -15),
+            
+            percent1.trailingAnchor.constraint(equalTo: optionImageView1.trailingAnchor, constant: -10),
+            percent1.bottomAnchor.constraint(equalTo: optionImageView1.bottomAnchor, constant: -15),
+            
         ])
     }
     
@@ -174,10 +222,30 @@ class PostView: UIView {
     }
     
     @objc private func optionButtonClicked() {
+        // Önce butonların görünürlüğünü değiştir
+        optionButton.isHidden = true
+        optionButton1.isHidden = true
+        
+        // Ardından labelların görünürlüğünü aç
+        percentLabel.isHidden = false
+        percentLabel1.isHidden = false
+        percent.isHidden = false
+        percent1.isHidden = false
+        
         print("Option Button Clicked")
     }
     
     @objc private func optionButton1Clicked() {
+        // Önce butonların görünürlüğünü değiştir
+        optionButton.isHidden = true
+        optionButton1.isHidden = true
+        
+        // Ardından labelların görünürlüğünü aç
+        percentLabel.isHidden = false
+        percentLabel1.isHidden = false
+        percent.isHidden = false
+        percent1.isHidden = false
+        
         print("Option Button 1 Clicked")
     }
     
@@ -186,6 +254,7 @@ class PostView: UIView {
         optionImageView.roundLeftCorners(radius: 10)
         optionImageView1.roundRightCorners(radius: 10)
     }
+    
 }
 
 extension UIImageView {
