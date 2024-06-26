@@ -122,8 +122,7 @@ class PostView: UIView {
 
             totalVotesLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
             totalVotesLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
-            
-            
+
         ])
     }
 
@@ -143,5 +142,32 @@ class PostView: UIView {
 
         totalVotesLabel.text = "\(post.options.count) Total Votes"
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        optionImageView.roundLeftCorners(radius: 10)
+        optionImageView1.roundRightCorners(radius: 10)
+    }
 }
+
+extension UIImageView {
+    func roundLeftCorners(radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: self.bounds,
+                                byRoundingCorners: [.topLeft, .bottomLeft],
+                                cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        self.layer.mask = mask
+    }
+    
+    func roundRightCorners(radius: CGFloat) {
+            let path = UIBezierPath(roundedRect: self.bounds,
+                                    byRoundingCorners: [.topRight, .bottomRight],
+                                    cornerRadii: CGSize(width: radius, height: radius))
+            let mask = CAShapeLayer()
+            mask.path = path.cgPath
+            self.layer.mask = mask
+        }
+}
+
 
