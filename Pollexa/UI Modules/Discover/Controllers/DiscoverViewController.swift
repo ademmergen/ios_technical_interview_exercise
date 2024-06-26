@@ -72,7 +72,7 @@ class DiscoverViewController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "avatar_1") // Görüntüyü ayarlayın
+        imageView.image = UIImage(named: "avatar_1")
         imageView.layer.cornerRadius = 17
         imageView.clipsToBounds = true
         
@@ -198,10 +198,6 @@ class DiscoverViewController: UIViewController {
             postView.configure(with: post)
             stackView.addArrangedSubview(postView)
             
-            NSLayoutConstraint.activate([
-                postView.widthAnchor.constraint(equalToConstant: 388),
-                postView.heightAnchor.constraint(equalToConstant: 338)
-            ])
         }
     }
 }
