@@ -5,10 +5,17 @@
 //  Created by Adem Mergen on 24.06.2024.
 //
 
+protocol PostViewDelegate: AnyObject {
+    func didTapOptionButton(in postView: PostView)
+    func didTapOptionButton1(in postView: PostView)
+}
+
 import Foundation
 import UIKit
 
 class PostView: UIView {
+    
+    weak var delegate: PostViewDelegate?
     
     private let userImageView = UIImageView()
     private let usernameLabel = UILabel()
@@ -82,11 +89,11 @@ class PostView: UIView {
         
         percentLabel.font = .systemFont(ofSize: 15, weight: .bold)
         percentLabel.textColor = .white
-        percentLabel.text = "56"
+        percentLabel.text = "50"
         
         percentLabel1.font = .systemFont(ofSize: 15, weight: .bold)
         percentLabel1.textColor = .white
-        percentLabel1.text = "44"
+        percentLabel1.text = "50"
         
         percent.font = .systemFont(ofSize: 15, weight: .bold)
         percent.textColor = .white
@@ -101,7 +108,6 @@ class PostView: UIView {
         percent.isHidden = true
         percent1.isHidden = true
         
-        // Alt görselleri ekle
         addSubview(userImageView)
         addSubview(usernameLabel)
         addSubview(dateLabel)
@@ -118,7 +124,6 @@ class PostView: UIView {
         addSubview(percent)
         addSubview(percent1)
         
-        // Kısıtlamaları kur
         setupConstraints()
     }
     
@@ -218,34 +223,32 @@ class PostView: UIView {
             optionImageView1.image = post.options[1].image
         }
         
-        totalVotesLabel.text = "\(post.options.count) Total Votes"
+        totalVotesLabel.text = "1 Total Votes"
     }
     
     @objc private func optionButtonClicked() {
-        // Önce butonların görünürlüğünü değiştir
-        optionButton.isHidden = true
-        optionButton1.isHidden = true
         
-        // Ardından labelların görünürlüğünü aç
+        optionButton1.isHidden = true
         percentLabel.isHidden = false
         percentLabel1.isHidden = false
         percent.isHidden = false
         percent1.isHidden = false
         
+        delegate?.didTapOptionButton(in: self)
+        totalVotesLabel.text = "2 Total Votes"
         print("Option Button Clicked")
     }
     
     @objc private func optionButton1Clicked() {
-        // Önce butonların görünürlüğünü değiştir
-        optionButton.isHidden = true
-        optionButton1.isHidden = true
         
-        // Ardından labelların görünürlüğünü aç
+        optionButton.isHidden = true
         percentLabel.isHidden = false
         percentLabel1.isHidden = false
         percent.isHidden = false
         percent1.isHidden = false
         
+        delegate?.didTapOptionButton1(in: self)
+        totalVotesLabel.text = "2 Total Votes"
         print("Option Button 1 Clicked")
     }
     
@@ -254,7 +257,6 @@ class PostView: UIView {
         optionImageView.roundLeftCorners(radius: 10)
         optionImageView1.roundRightCorners(radius: 10)
     }
-    
 }
 
 extension UIImageView {
@@ -276,6 +278,3 @@ extension UIImageView {
         self.layer.mask = mask
     }
 }
-
-
-

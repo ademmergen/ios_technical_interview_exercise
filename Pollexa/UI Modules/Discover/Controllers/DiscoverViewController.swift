@@ -7,13 +7,15 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController {
+class DiscoverViewController: UIViewController, PostViewDelegate {
     
     // MARK: - Properties
     private let postProvider = PostProvider.shared
     private var posts: [Post] = []
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
+    private let activePollsLabel = UILabel()
+    private var remainingPollsCount: Int = 0
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -28,13 +30,23 @@ class DiscoverViewController: UIViewController {
         fetchPosts()
     }
     
-    // MARK: - Setup Methods
+    // MARK: - PostViewDelegate
+    func didTapOptionButton(in postView: PostView) {
+        decrementPollsCount()
+    }
     
+    func didTapOptionButton1(in postView: PostView) {
+        decrementPollsCount()
+    }
+    
+    // MARK: - Setup Methods
     private func fetchPosts() {
         postProvider.fetchAll { result in
             switch result {
             case .success(let posts):
                 self.posts = posts
+                self.remainingPollsCount = posts.count
+                self.activePollsLabel.text = "\(posts.count) Active Polls"
                 self.setupPostViews()
             case .failure(let error):
                 debugPrint(error.localizedDescription)
@@ -113,9 +125,7 @@ class DiscoverViewController: UIViewController {
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
         
-        let activePollsLabel = UILabel()
         activePollsLabel.translatesAutoresizingMaskIntoConstraints = false
-        activePollsLabel.text = "2 Active Polls"
         activePollsLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         activePollsLabel.textColor = .white
         
@@ -163,7 +173,7 @@ class DiscoverViewController: UIViewController {
     
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsVerticalScrollIndicator = false // Scroll çubuğunu gizleme
+        scrollView.showsVerticalScrollIndicator = false
         
         view.addSubview(scrollView)
         
@@ -197,9 +207,13 @@ class DiscoverViewController: UIViewController {
             postView.translatesAutoresizingMaskIntoConstraints = false
             postView.configure(with: post)
             stackView.addArrangedSubview(postView)
-            
+            postView.delegate = self
         }
     }
+    
+    // MARK: - Helper Methods
+    private func decrementPollsCount() {
+        remainingPollsCount -= 1
+        activePollsLabel.text = "\(remainingPollsCount) Active Polls"
+    }
 }
-
-
