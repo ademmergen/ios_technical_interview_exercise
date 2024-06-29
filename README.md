@@ -1,3 +1,4 @@
+![ScreenRecording2024-06-29at12 15 22-ezgif com-resize](https://github.com/ademmergen/CatchTheKennyGame/assets/159759443/21a09497-44b0-41f1-b470-e6413fbfd508)
 # ios Technical Interview Exercise
 In this project, you are tasked with creating the main screen of an iOS app using Swift programming language and UIKit. The app is a social polling platform where users can create and share polls on various topics. Your task involves displaying mock data representing user-generated polls. This app is an opportunity to demonstrate your ability to craft a user-friendly interface, manage data efficiently, and implement the MVVM architectural pattern to produce a clean, maintainable, and well-structured codebase. 
 
