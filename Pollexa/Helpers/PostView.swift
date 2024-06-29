@@ -73,19 +73,28 @@ class PostView: UIView {
         totalVotesLabel.font = .systemFont(ofSize: 13)
         totalVotesLabel.textColor = UIColor(named: "TotalVotesLabel")
         
+        optionImageView.isUserInteractionEnabled = true
+        optionImageView1.isUserInteractionEnabled = true
+        
+        let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(optionImageViewTapped))
+        optionImageView.addGestureRecognizer(tapGestureRecognizer1)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(optionImageView1Tapped))
+        optionImageView1.addGestureRecognizer(tapGestureRecognizer2)
+    
         optionButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         optionButton.tintColor = UIColor(named: "AccentColor")
         optionButton.backgroundColor = .white
         optionButton.layer.cornerRadius = 15
         optionButton.clipsToBounds = true
-        optionButton.addTarget(self, action: #selector(optionButtonClicked), for: .touchUpInside)
+        optionButton.addTarget(self, action: #selector(optionImageViewTapped), for: .touchUpInside)
         
         optionButton1.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
         optionButton1.tintColor = UIColor(named: "AccentColor")
         optionButton1.backgroundColor = .white
         optionButton1.layer.cornerRadius = 15
         optionButton1.clipsToBounds = true
-        optionButton1.addTarget(self, action: #selector(optionButton1Clicked), for: .touchUpInside)
+        optionButton1.addTarget(self, action: #selector(optionImageView1Tapped), for: .touchUpInside)
         
         percentLabel.font = .systemFont(ofSize: 15, weight: .bold)
         percentLabel.textColor = .white
@@ -226,8 +235,12 @@ class PostView: UIView {
         totalVotesLabel.text = "1 Total Votes"
     }
     
-    @objc private func optionButtonClicked() {
+    @objc private func optionImageViewTapped() {
         
+        optionImageView.isUserInteractionEnabled = false
+        optionImageView1.isUserInteractionEnabled = false
+        
+        optionButton.isEnabled = false
         optionButton1.isHidden = true
         percentLabel.isHidden = false
         percentLabel1.isHidden = false
@@ -236,11 +249,15 @@ class PostView: UIView {
         
         delegate?.didTapOptionButton(in: self)
         totalVotesLabel.text = "2 Total Votes"
-        print("Option Button Clicked")
+        print("Option ImageView Clicked")
     }
     
-    @objc private func optionButton1Clicked() {
+    @objc private func optionImageView1Tapped() {
         
+        optionImageView1.isUserInteractionEnabled = false
+        optionImageView.isUserInteractionEnabled = false
+        
+        optionButton1.isEnabled = false
         optionButton.isHidden = true
         percentLabel.isHidden = false
         percentLabel1.isHidden = false
@@ -249,7 +266,7 @@ class PostView: UIView {
         
         delegate?.didTapOptionButton1(in: self)
         totalVotesLabel.text = "2 Total Votes"
-        print("Option Button 1 Clicked")
+        print("Option ImageView 1 Clicked")
     }
     
     override func layoutSubviews() {
