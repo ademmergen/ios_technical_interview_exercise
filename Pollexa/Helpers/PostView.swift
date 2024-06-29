@@ -219,21 +219,26 @@ class PostView: UIView {
     }
     
     func configure(with post: Post) {
-        userImageView.image = post.user.image
-        usernameLabel.text = post.user.username
-        dateLabel.text = DateFormatter.localizedString(from: post.createdAt, dateStyle: .short, timeStyle: .none)
-        lastVotedLabel.text = "LAST VOTED 1 HOUR AGO"
-        contentLabel.text = post.content
-        
-        if post.options.count > 0 {
-            optionImageView.image = post.options[0].image
+            userImageView.image = post.user.image
+            usernameLabel.text = post.user.username
+            
+            let formatter = RelativeDateTimeFormatter()
+            formatter.unitsStyle = .full
+            let timeInterval = Date().timeIntervalSince(post.createdAt)
+            dateLabel.text = formatter.localizedString(for: Date(timeIntervalSinceNow: -timeInterval), relativeTo: Date())
+            
+            lastVotedLabel.text = "LAST VOTED 1 HOUR AGO"
+            contentLabel.text = post.content
+            
+            if post.options.count > 0 {
+                optionImageView.image = post.options[0].image
+            }
+            if post.options.count > 1 {
+                optionImageView1.image = post.options[1].image
+            }
+            
+            totalVotesLabel.text = "1 Total Votes"
         }
-        if post.options.count > 1 {
-            optionImageView1.image = post.options[1].image
-        }
-        
-        totalVotesLabel.text = "1 Total Votes"
-    }
     
     @objc private func optionImageViewTapped() {
         
@@ -246,6 +251,7 @@ class PostView: UIView {
         percentLabel1.isHidden = false
         percent.isHidden = false
         percent1.isHidden = false
+        lastVotedLabel.text = "LAST VOTED NOW"
         
         delegate?.didTapOptionButton(in: self)
         totalVotesLabel.text = "2 Total Votes"
@@ -263,6 +269,7 @@ class PostView: UIView {
         percentLabel1.isHidden = false
         percent.isHidden = false
         percent1.isHidden = false
+        lastVotedLabel.text = "LAST VOTED NOW"
         
         delegate?.didTapOptionButton1(in: self)
         totalVotesLabel.text = "2 Total Votes"
