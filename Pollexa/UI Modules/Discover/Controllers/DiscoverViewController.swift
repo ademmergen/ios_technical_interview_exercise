@@ -10,27 +10,47 @@ import UIKit
 class DiscoverViewController: UIViewController, PostViewDelegate {
     
     // MARK: - Properties
+    
     private let postProvider = PostProvider.shared
     private var posts: [Post] = []
-    private let scrollView = UIScrollView()
-    private let stackView = UIStackView()
-    private let activePollsLabel = UILabel()
     private var remainingPollsCount: Int = 0
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private let activePollsLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .white
+        return label
+    }()
+    
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = UIColor(named: "ViewBackground")
-        
         setupNavigationBar()
         setupHeaderView()
         setupScrollView()
-        setupStackView()
         fetchPosts()
     }
     
     // MARK: - PostViewDelegate
+    
     func didTapOptionButton(in postView: PostView) {
         decrementPollsCount()
     }
@@ -40,6 +60,7 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
     }
     
     // MARK: - Setup Methods
+    
     private func fetchPosts() {
         postProvider.fetchAll { result in
             switch result {
@@ -57,7 +78,6 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
     private func setupNavigationBar() {
         let navigationBar = UIView()
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(navigationBar)
         
         NSLayoutConstraint.activate([
@@ -68,11 +88,9 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
         ])
         
         let addButton = UIButton(type: .system)
-        let addImage = UIImage(systemName: "plus")
-        addButton.setImage(addImage, for: .normal)
+        addButton.setImage(UIImage(systemName: "plus"), for: .normal)
         addButton.tintColor = UIColor(named: "AccentColor")
         addButton.translatesAutoresizingMaskIntoConstraints = false
-        
         navigationBar.addSubview(addButton)
         
         NSLayoutConstraint.activate([
@@ -87,7 +105,6 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
         imageView.image = UIImage(named: "avatar_1")
         imageView.layer.cornerRadius = 17
         imageView.clipsToBounds = true
-        
         navigationBar.addSubview(imageView)
         
         NSLayoutConstraint.activate([
@@ -99,7 +116,6 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
         
         let discoverNavigationBar = UIView()
         discoverNavigationBar.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(discoverNavigationBar)
         
         NSLayoutConstraint.activate([
@@ -124,10 +140,19 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
     private func setupHeaderView() {
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.backgroundColor = UIColor(named: "AccentColor")
+        headerView.layer.cornerRadius = 16
+        view.addSubview(headerView)
         
-        activePollsLabel.translatesAutoresizingMaskIntoConstraints = false
-        activePollsLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        activePollsLabel.textColor = .white
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 170),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            headerView.heightAnchor.constraint(equalToConstant: 78)
+        ])
+        
+        activePollsLabel.text = "\(posts.count) Active Polls"
+        headerView.addSubview(activePollsLabel)
         
         let seeDetailsLabel = UILabel()
         seeDetailsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -135,24 +160,15 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
         seeDetailsLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         seeDetailsLabel.alpha = 0.5
         seeDetailsLabel.textColor = .white
+        headerView.addSubview(seeDetailsLabel)
         
         let arrowImageView = UIImageView()
         arrowImageView.translatesAutoresizingMaskIntoConstraints = false
         arrowImageView.image = UIImage(systemName: "arrow.right.square.fill")
         arrowImageView.tintColor = .white
-        
-        headerView.addSubview(activePollsLabel)
-        headerView.addSubview(seeDetailsLabel)
         headerView.addSubview(arrowImageView)
         
-        view.addSubview(headerView)
-        
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 170),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            headerView.heightAnchor.constraint(equalToConstant: 78),
-            
             activePollsLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20),
             activePollsLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 15),
             activePollsLabel.heightAnchor.constraint(equalToConstant: 25),
@@ -166,15 +182,9 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
             arrowImageView.heightAnchor.constraint(equalToConstant: 33),
             arrowImageView.widthAnchor.constraint(equalToConstant: 33)
         ])
-        
-        headerView.backgroundColor = UIColor(named: "AccentColor")
-        headerView.layer.cornerRadius = 16
     }
     
     private func setupScrollView() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsVerticalScrollIndicator = false
-        
         view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
@@ -195,12 +205,6 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
         ])
     }
     
-    private func setupStackView() {
-        stackView.axis = .vertical
-        stackView.spacing = 20
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-    }
-    
     private func setupPostViews() {
         for post in posts {
             let postView = PostView()
@@ -212,8 +216,10 @@ class DiscoverViewController: UIViewController, PostViewDelegate {
     }
     
     // MARK: - Helper Methods
+    
     private func decrementPollsCount() {
         remainingPollsCount -= 1
         activePollsLabel.text = "\(remainingPollsCount) Active Polls"
     }
 }
+
